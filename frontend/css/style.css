@@ -1,0 +1,181 @@
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#0d0d0d,#1a1a1a,#300000);
+    color:#fff;
+    min-height:100vh;
+}
+
+/* CONTAINER */
+
+.container{
+    width:90%;
+    max-width:900px;
+    margin:40px auto;
+    padding:30px;
+    background:#151515;
+    border:2px solid #b30000;
+    border-radius:15px;
+    box-shadow:0 0 25px rgba(255,0,0,.25);
+}
+
+/* TITULOS */
+
+h2,h3{
+    text-align:center;
+    color:#ff3b3b;
+    margin-bottom:20px;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #444;
+    margin:25px 0;
+}
+
+/* CAMPOS */
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #555;
+    background:#222;
+    color:white;
+    font-size:16px;
+    transition:.3s;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#bbb;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#ff0000;
+    box-shadow:0 0 10px rgba(255,0,0,.5);
+}
+
+textarea{
+    min-height:110px;
+    resize:none;
+}
+
+/* BOTÕES */
+
+button{
+    width:100%;
+    padding:13px;
+    margin-top:18px;
+    border:none;
+    border-radius:8px;
+    background:#c40000;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#ff0000;
+    transform:translateY(-2px);
+    box-shadow:0 0 15px rgba(255,0,0,.6);
+}
+
+/* CARDS */
+
+.card{
+    background:#1d1d1d;
+    border-left:6px solid #c40000;
+    padding:18px;
+    margin:18px 0;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,.4);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:scale(1.01);
+    box-shadow:0 0 20px rgba(255,0,0,.25);
+}
+
+.card h3{
+    color:#ff4d4d;
+    margin-bottom:10px;
+    text-align:left;
+}
+
+.card p{
+    margin:8px 0;
+}
+
+/* CLASSIFICAÇÃO */
+
+.verde{
+    display:inline-block;
+    background:#1f8f45;
+    color:white;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.amarelo{
+    display:inline-block;
+    background:#d4a000;
+    color:black;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.vermelho{
+    display:inline-block;
+    background:#d40000;
+    color:white;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+/* RESULTADO */
+
+#resultado{
+    margin-top:20px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#b30000;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#ff0000;
+}
+
