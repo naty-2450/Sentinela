@@ -1,35 +1,86 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="container">
-  <h2 > Health Vision</h2><center>
-  <img src="logo.png" alt="" height="200" width="200" >
-  </center>
-  <input id="usuario" placeholder="Usuário">
-  <input id="senha" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-</div>
 
-<script>
-function login() {
-  fetch("http://localhost:3000/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      usuario: usuario.value,
-      senha: senha.value
-    })
-  })
-  .then(r => r.json())
-  .then(data => {
-    if(data.tipo === "triagem") location.href = "triagem.html";
-    if(data.tipo === "medico") location.href = "medico.html";
-    if(data.tipo === "atendimento") location.href = "atendimento.html";
-  });
-}
-</script>
+<body>
+
+  <div class="container">
+
+    <h2>Health Vision</h2>
+
+    <center>
+      <img src="logo.png" alt="Health Vision" height="200" width="200">
+    </center>
+
+    <input id="usuario" placeholder="Usuário">
+
+    <input id="senha" type="password" placeholder="Senha">
+
+    <button onclick="login()">Entrar</button>
+
+  </div>
+
+  <script>
+    async function login() {
+
+      const usuario = document.getElementById("usuario").value;
+      const senha = document.getElementById("senha").value;
+
+      try {
+
+        const resposta = await fetch("/login", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            usuario: usuario,
+            senha: senha
+          })
+        });
+
+        const data = await resposta.json();
+
+        // Login inválido
+        if (!resposta.ok) {
+          alert(data.erro || "Usuário ou senha incorretos.");
+          return;
+        }
+
+        // Redirecionamento de acordo com o tipo de usuário
+        if (data.tipo === "triagem") {
+
+          location.href = "/triagem.html";
+
+        } else if (data.tipo === "medico") {
+
+          location.href = "/medico.html";
+
+        } else if (data.tipo === "atendimento") {
+
+          location.href = "/atendimento.html";
+
+        } else {
+
+          alert("Tipo de usuário não reconhecido.");
+
+        }
+
+      } catch (erro) {
+
+        console.error("Erro ao realizar login:", erro);
+
+        alert("Não foi possível conectar ao servidor.");
+
+      }
+    }
+  </script>
+
 </body>
 </html>
+```
