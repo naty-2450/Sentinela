@@ -33,16 +33,15 @@ function writeDB(data) {
 app.post("/login", (req, res) => {
   const db = readDB();
 
-  console.log("DB:", db);
-  console.log("LOGIN RECEBIDO:", req.body);
-
   const user = db.usuarios.find(u =>
     u.usuario === req.body.usuario &&
     u.senha === req.body.senha
   );
 
   if (!user) {
-    return res.status(401).json({ erro: "Login inválido" });
+    return res.status(401).json({
+      erro: "Login inválido"
+    });
   }
 
   res.json(user);
@@ -149,8 +148,4 @@ app.get("/medicacoes", (req, res) => {
 });
 
 // START
-const PORT = process.env.PORT || 10000;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+module.exports = app;
