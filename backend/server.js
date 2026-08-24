@@ -187,6 +187,9 @@ app.get("/medicacoes", (req, res) => {
 });
 
 // START
-const PORT = process.env.PORT || 3000; 
-app.listen(PORT, () => {console.log(`Porta${PORT}`);
-                       });
+// START
+const PORT = Number(process.env.PORT) || 10000;
+
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor rodando em 0.0.0.0:${PORT}`);
+});
