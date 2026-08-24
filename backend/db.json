@@ -13,7 +13,7 @@
     {
       "usuario": "atendimento",
       "senha": "123",
-      "tipo": "atendimento"
+      "tipo": "atendimento" 
     }
   ],
   "pacientes": [
