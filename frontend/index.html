@@ -15,19 +15,40 @@
 
 <script>
 function login() {
+  const usuario = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
   fetch("/login", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      usuario: usuario.value,
-      senha: senha.value
-    })
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ usuario, senha })
   })
-  .then(r => r.json())
-  .then(data => {
-    if(data.tipo === "triagem") location.href = "triagem.html";
-    if(data.tipo === "medico") location.href = "medico.html";
-    if(data.tipo === "atendimento") location.href = "atendimento.html";
+  .then(async response => {
+    const data = await response.json();
+
+    console.log("STATUS:", response.status);
+    console.log("RESPOSTA:", data);
+
+    if (!response.ok) {
+      alert("Erro: " + (data.erro || "falha no login"));
+      return;
+    }
+
+    if (data.tipo === "triagem") {
+      window.location.href = "/triagem.html";
+    } else if (data.tipo === "medico") {
+      window.location.href = "/medico.html";
+    } else if (data.tipo === "atendimento") {
+      window.location.href = "/atendimento.html";
+    } else {
+      alert("Tipo de usuário desconhecido: " + data.tipo);
+    }
+  })
+  .catch(error => {
+    console.error(error);
+    alert("Não foi possível conectar ao servidor.");
   });
 }
 </script>
