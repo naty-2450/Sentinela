@@ -1,57 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="css/style.css">
+
+  <title>Health Vision</title>
 </head>
+
 <body>
-<div class="container">
-  <h2 > Health Vision</h2><center>
-  <img src="logo.png" alt="" height="200" width="200" >
+
+  <center>
+    <div class="container">
+
+      <!-- LOGO / MARCA -->
+      <div class="logo-area">
+        <img
+          src="img/logo-health-vision.png"
+          alt="Health Vision"
+          class="logo"
+        >
+
+        <div class="logo-subtitle">
+          SISTEMA HOSPITALAR
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="login-area">
+
+        <input
+          id="usuario"
+          type="text"
+          placeholder="Usuário"
+          autocomplete="username"
+        >
+
+        <input
+          id="senha"
+          type="password"
+          placeholder="Senha"
+          autocomplete="current-password"
+        >
+
+        <button onclick="login()">
+          Entrar
+        </button>
+
+      </div>
+
+    </div>
   </center>
-  <input id="usuario" placeholder="Usuário">
-  <input id="senha" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-</div>
 
-<script>
-function login() {
-  const usuario = document.getElementById("usuario").value;
-  const senha = document.getElementById("senha").value;
+  <script>
+    function login() {
+      fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          usuario: usuario.value,
+          senha: senha.value
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
 
-  fetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ usuario, senha })
-  })
-  .then(async response => {
-    const data = await response.json();
+        if (data.tipo === "triagem") {
+          location.href = "triagem.html";
+        }
 
-    console.log("STATUS:", response.status);
-    console.log("RESPOSTA:", data);
+        if (data.tipo === "medico") {
+          location.href = "medico.html";
+        }
 
-    if (!response.ok) {
-      alert("Erro: " + (data.erro || "falha no login"));
-      return;
+        if (data.tipo === "atendimento") {
+          location.href = "atendimento.html";
+        }
+
+      });
     }
+  </script>
 
-    if (data.tipo === "triagem") {
-      window.location.href = "/triagem.html";
-    } else if (data.tipo === "medico") {
-      window.location.href = "/medico.html";
-    } else if (data.tipo === "atendimento") {
-      window.location.href = "/atendimento.html";
-    } else {
-      alert("Tipo de usuário desconhecido: " + data.tipo);
-    }
-  })
-  .catch(error => {
-    console.error(error);
-    alert("Não foi possível conectar ao servidor.");
-  });
-}
-</script>
-</body> 
+</body>
 </html>
- 
