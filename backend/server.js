@@ -10,9 +10,7 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-const DB_FILE = path.join(process.cwd(), "backend", "db.json");
-
-console.log("BANCO:", DB_FILE);
+const DB_FILE = path.join(__dirname, "db.json");
 
 function readDB() {
   if (!fs.existsSync(DB_FILE)) {
@@ -189,8 +187,8 @@ app.get("/medicacoes", (req, res) => {
 });
 
 // START
-// START
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`🏥 Hospital Pro rodando na porta ${PORT}`);
 });
