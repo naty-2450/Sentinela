@@ -10,7 +10,9 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-const DB_FILE = path.join(__dirname, "../backend/db.json");
+const DB_FILE = path.join(process.cwd(), "backend", "db.json");
+
+console.log("BANCO:", DB_FILE);
 
 function readDB() {
   if (!fs.existsSync(DB_FILE)) {
