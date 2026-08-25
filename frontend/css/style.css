@@ -1,181 +1,408 @@
-/* RESET */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#0d0d0d,#1a1a1a,#300000);
-    color:#fff;
-    min-height:100vh;
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #300000);
+    color: #fff;
+    min-height: 100vh;
 }
 
-/* CONTAINER */
 
-.container{
-    width:90%;
-    max-width:900px;
-    margin:40px auto;
-    padding:30px;
-    background:#151515;
-    border:2px solid #b30000;
-    border-radius:15px;
-    box-shadow:0 0 25px rgba(255,0,0,.25);
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+
+    background: #151515;
+    border: 2px solid #b30000;
+    border-radius: 15px;
+
+    box-shadow: 0 0 25px rgba(255, 0, 0, .25);
 }
 
-/* TITULOS */
 
-h2,h3{
-    text-align:center;
-    color:#ff3b3b;
-    margin-bottom:20px;
+/* =========================================================
+   TÍTULOS
+========================================================= */
+
+h1,
+h2,
+h3 {
+    text-align: center;
+    color: #ff3b3b;
+    margin-bottom: 20px;
 }
 
-hr{
-    border:none;
-    border-top:1px solid #444;
-    margin:25px 0;
+hr {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 25px 0;
 }
 
-/* CAMPOS */
+
+/* =========================================================
+   CAMPOS DO FORMULÁRIO
+========================================================= */
 
 input,
 select,
-textarea{
-    width:100%;
-    padding:12px;
-    margin-top:12px;
-    border-radius:8px;
-    border:1px solid #555;
-    background:#222;
-    color:white;
-    font-size:16px;
-    transition:.3s;
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+
+    border-radius: 8px;
+    border: 1px solid #555;
+
+    background: #222;
+    color: white;
+
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    transition: .3s;
 }
 
+
+/* Placeholder */
+
 input::placeholder,
-textarea::placeholder{
-    color:#bbb;
+textarea::placeholder {
+    color: #bbb;
 }
+
+
+/* Foco */
 
 input:focus,
 select:focus,
-textarea:focus{
-    outline:none;
-    border-color:#ff0000;
-    box-shadow:0 0 10px rgba(255,0,0,.5);
+textarea:focus {
+    outline: none;
+
+    border-color: #ff0000;
+
+    box-shadow: 0 0 10px rgba(255, 0, 0, .5);
 }
 
-textarea{
-    min-height:110px;
-    resize:none;
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+select {
+    cursor: pointer;
 }
 
-/* BOTÕES */
-
-button{
-    width:100%;
-    padding:13px;
-    margin-top:18px;
-    border:none;
-    border-radius:8px;
-    background:#c40000;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
+select option {
+    background: #222;
+    color: white;
 }
 
-button:hover{
-    background:#ff0000;
-    transform:translateY(-2px);
-    box-shadow:0 0 15px rgba(255,0,0,.6);
+
+/* =========================================================
+   DATA
+========================================================= */
+
+input[type="date"] {
+    color-scheme: dark;
 }
 
-/* CARDS */
 
-.card{
-    background:#1d1d1d;
-    border-left:6px solid #c40000;
-    padding:18px;
-    margin:18px 0;
-    border-radius:10px;
-    box-shadow:0 0 15px rgba(0,0,0,.4);
-    transition:.3s;
+/* =========================================================
+   UPLOAD DE FOTO
+========================================================= */
+
+input[type="file"] {
+    padding: 10px;
+
+    cursor: pointer;
+
+    background: #1d1d1d;
+    border: 1px dashed #777;
 }
 
-.card:hover{
-    transform:scale(1.01);
-    box-shadow:0 0 20px rgba(255,0,0,.25);
+input[type="file"]:hover {
+    border-color: #ff0000;
 }
 
-.card h3{
-    color:#ff4d4d;
-    margin-bottom:10px;
-    text-align:left;
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+textarea {
+    min-height: 110px;
+    resize: none;
 }
 
-.card p{
-    margin:8px 0;
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #c40000;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
 }
 
-/* CLASSIFICAÇÃO */
+button:hover {
+    background: #ff0000;
 
-.verde{
-    display:inline-block;
-    background:#1f8f45;
-    color:white;
-    padding:6px 12px;
-    border-radius:20px;
-    font-weight:bold;
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 15px rgba(255, 0, 0, .6);
 }
 
-.amarelo{
-    display:inline-block;
-    background:#d4a000;
-    color:black;
-    padding:6px 12px;
-    border-radius:20px;
-    font-weight:bold;
+button:active {
+    transform: translateY(0);
 }
 
-.vermelho{
-    display:inline-block;
-    background:#d40000;
-    color:white;
-    padding:6px 12px;
-    border-radius:20px;
-    font-weight:bold;
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    background: #1d1d1d;
+
+    border-left: 6px solid #c40000;
+
+    padding: 18px;
+    margin: 18px 0;
+
+    border-radius: 10px;
+
+    box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+
+    transition: .3s;
 }
 
-/* RESULTADO */
+.card:hover {
+    transform: scale(1.01);
 
-#resultado{
-    margin-top:20px;
-    text-align:center;
-    font-size:18px;
-    font-weight:bold;
+    box-shadow: 0 0 20px rgba(255, 0, 0, .25);
 }
 
-/* SCROLL */
-
-::-webkit-scrollbar{
-    width:10px;
+.card h3 {
+    color: #ff4d4d;
+    margin-bottom: 10px;
+    text-align: left;
 }
 
-::-webkit-scrollbar-track{
-    background:#111;
+.card p {
+    margin: 8px 0;
 }
 
-::-webkit-scrollbar-thumb{
-    background:#b30000;
-    border-radius:20px;
+
+/* =========================================================
+   CLASSIFICAÇÃO
+========================================================= */
+
+.verde {
+    display: inline-block;
+
+    background: #1f8f45;
+    color: white;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
 }
 
-::-webkit-scrollbar-thumb:hover{
-    background:#ff0000;
+.amarelo {
+    display: inline-block;
+
+    background: #d4a000;
+    color: black;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
 }
 
+.vermelho {
+    display: inline-block;
+
+    background: #d40000;
+    color: white;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   RESULTADO
+========================================================= */
+
+#resultado {
+    margin-top: 20px;
+
+    text-align: center;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   MENSAGENS DE STATUS
+========================================================= */
+
+.sucesso {
+    margin-top: 15px;
+    padding: 12px;
+
+    background: #155d2c;
+    border: 1px solid #1f8f45;
+
+    border-radius: 8px;
+
+    color: #fff;
+
+    text-align: center;
+}
+
+.erro {
+    margin-top: 15px;
+    padding: 12px;
+
+    background: #5d1515;
+    border: 1px solid #d40000;
+
+    border-radius: 8px;
+
+    color: #fff;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+label {
+    display: block;
+
+    margin-top: 15px;
+    margin-bottom: 5px;
+
+    color: #ddd;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   GRUPO DE CAMPOS
+========================================================= */
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   LINHA DE CAMPOS
+========================================================= */
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row > * {
+    flex: 1;
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b30000;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff0000;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 15px;
+    }
+
+    button {
+        font-size: 15px;
+    }
+}
