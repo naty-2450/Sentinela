@@ -46,7 +46,33 @@
     }
   </style>
 </head>
+  
 <body>
+ <div class="container">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <h2 >🩺 Painel Médico</h2>
+</div>
+
+
+  <div id="triagens"></div>
+
+  <hr>
+
+  <h3>Consulta</h3>
+
+  <input id="paciente" placeholder="Paciente" readonly>
+
+  <input id="diagnostico" placeholder="Diagnóstico">
+
+  <select id="medicacao">
+    <option value="">Selecione a medicação</option>
+  </select>
+
+  <textarea id="obs" placeholder="Observações"></textarea>
+
+  <button onclick="salvar()">Salvar</button>
+
+</div>
 
 <script>
 
