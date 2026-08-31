@@ -78,41 +78,107 @@
 
 let triagensCarregadas = [];
 
-function carregar() {
-  fetch("/triagens")
-    .then(r => r.json())
-    .then(data => {
-      triagensCarregadas = data;
 
-      const div = document.getElementById("triagens");
-      div.innerHTML = "";
 
-      data.forEach((t, index) => {
-        div.innerHTML += `
-          <div class="card">
-            <h3>${t.nome}</h3>
 
-            <p><b>Sintoma:</b> ${t.sintoma || "Não informado"}</p>
+async function carregar() {
+  try {
+    const [resTriagens, resPacientes] = await Promise.all([
+      fetch("/triagens"),
+      fetch("/pacientes")
+    ]);
 
-            <p><b>Temperatura:</b> ${t.temperatura || "Não informada"}°C</p>
+    const triagens = await resTriagens.json();
+    const pacientes = await resPacientes.json();
 
-            <p>
-              <span class="${t.risco}">
-                ${t.risco}
-              </span>
-            </p>
+    triagensCarregadas = triagens;
 
-            <p><b>Alergia:</b> ${t.alergia || "Nenhuma"}</p>
+    const div = document.getElementById("triagens");
+    div.innerHTML = "";
 
-            <p><b>Observação:</b> ${t.observacao || "Nenhuma"}</p>
+    triagens.forEach((t, index) => {
 
-            <button class="btn-abrir-tv" onclick="selecionar(${index})">
-              Atender
-            </button>
-          </div>
-        `;
-      });
+      // Encontra o cadastro completo do paciente
+      const paciente = pacientes.find(p => p.nome === t.nome) || {};
+
+      div.innerHTML += `
+        <div class="card">
+
+          <h3>${t.nome}</h3>
+
+          <h4>📋 Dados do paciente</h4>
+
+          <p><b>CPF:</b> ${paciente.cpf || "Não informado"}</p>
+
+          <p><b>Data de nascimento:</b> 
+            ${paciente.data_nascimento || "Não informada"}
+          </p>
+
+          <p><b>Sexo:</b> 
+            ${paciente.sexo || "Não informado"}
+          </p>
+
+          <p><b>Nome materno:</b> 
+            ${paciente.nome_mae || "Não informado"}
+          </p>
+
+          <p><b>Estado civil:</b> 
+            ${paciente.estado_civil || "Não informado"}
+          </p>
+
+          <p><b>Endereço:</b> 
+            ${paciente.endereco || "Não informado"}
+          </p>
+
+          <p><b>Telefone:</b> 
+            ${paciente.telefone || "Não informado"}
+          </p>
+
+          <p><b>E-mail:</b> 
+            ${paciente.email || "Não informado"}
+          </p>
+
+          <p><b>Contato de emergência:</b> 
+            ${paciente.contato_emergencia || "Não informado"}
+          </p>
+
+          <hr>
+
+          <h4>🩺 Dados da triagem</h4>
+
+          <p><b>Sintoma:</b> 
+            ${t.sintoma || "Não informado"}
+          </p>
+
+          <p><b>Temperatura:</b> 
+            ${t.temperatura || "Não informada"}°C
+          </p>
+
+          <p>
+            <span class="${t.risco}">
+              ${t.risco}
+            </span>
+          </p>
+
+          <p><b>Alergia:</b> 
+            ${t.alergia || "Nenhuma"}
+          </p>
+
+          <p><b>Observação:</b> 
+            ${t.observacao || "Nenhuma"}
+          </p>
+
+          <button class="btn-abrir-tv" onclick="selecionar(${index})">
+            Atender
+          </button>
+
+        </div>
+      `;
     });
+
+  } catch (erro) {
+    console.error("Erro ao carregar dados:", erro);
+  }
 }
 
 function selecionar(index) {
