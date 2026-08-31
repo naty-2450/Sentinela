@@ -87,37 +87,120 @@
 
 let triagensCarregadas = [];
 
-function carregar() {
-  fetch("/triagens")
-    .then(r => r.json())
-    .then(data => {
-      triagensCarregadas = data;
+async function carregar() {
+  try {
+    const [resTriagens, resPacientes] = await Promise.all([
+      fetch("/triagens"),
+      fetch("/pacientes")
+    ]);
 
-      const div = document.getElementById("triagens");
-      div.innerHTML = "";
+    const triagens = await resTriagens.json();
+    const pacientes = await resPacientes.json();
 
-      if (data.length === 0) {
-        div.innerHTML = "<p style='color:#888; text-align:center;'>Nenhum paciente na fila.</p>";
-        return;
-      }
+    triagensCarregadas = triagens;
 
-      data.forEach((t, index) => {
-        div.innerHTML += `
-          <div class="card">
-            <h3>${t.nome}</h3>
-            <p><b>Sintoma:</b> ${t.sintoma || "Não informado"}</p>
-            <p><b>Temperatura:</b> ${t.temperatura || "Não informada"}°C</p>
-            <p><span class="${t.risco}">${t.risco}</span></p>
-            <p><b>Alergia:</b> ${t.alergia || "Nenhuma"}</p>
-            <p><b>Observação:</b> ${t.observacao || "Nenhuma"}</p>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button onclick="selecionar(${index})">Atender</button>
-              <button class="btn-tv" onclick="chamarNaTV('${t.nome}')">📺 Chamar na TV</button>
-            </div>
+    const div = document.getElementById("triagens");
+    div.innerHTML = "";
+
+    if (triagens.length === 0) {
+      div.innerHTML =
+        "<p style='color:#888; text-align:center;'>Nenhum paciente na fila.</p>";
+      return;
+    }
+
+    triagens.forEach((t, index) => {
+
+      // Encontra o cadastro completo do paciente
+      const paciente = pacientes.find(p => p.nome === t.nome) || {};
+
+      div.innerHTML += `
+        <div class="card">
+
+          <h3>${t.nome}</h3>
+
+          <h4>📋 Dados do paciente</h4>
+
+          <p><b>CPF:</b> 
+            ${paciente.cpf || "Não informado"}
+          </p>
+
+          <p><b>Data de nascimento:</b> 
+            ${paciente.data_nascimento || "Não informada"}
+          </p>
+
+          <p><b>Sexo:</b> 
+            ${paciente.sexo || "Não informado"}
+          </p>
+
+          <p><b>Nome materno:</b> 
+            ${paciente.nome_mae || "Não informado"}
+          </p>
+
+          <p><b>Estado civil:</b> 
+            ${paciente.estado_civil || "Não informado"}
+          </p>
+
+          <p><b>Endereço:</b> 
+            ${paciente.endereco || "Não informado"}
+          </p>
+
+          <p><b>Telefone:</b> 
+            ${paciente.telefone || "Não informado"}
+          </p>
+
+          <p><b>E-mail:</b> 
+            ${paciente.email || "Não informado"}
+          </p>
+
+          <p><b>Contato de emergência:</b> 
+            ${paciente.contato_emergencia || "Não informado"}
+          </p>
+
+          <hr>
+
+          <h4>🩺 Dados da triagem</h4>
+
+          <p><b>Sintoma:</b> 
+            ${t.sintoma || "Não informado"}
+          </p>
+
+          <p><b>Temperatura:</b> 
+            ${t.temperatura || "Não informada"}°C
+          </p>
+
+          <p>
+            <span class="${t.risco}">
+              ${t.risco}
+            </span>
+          </p>
+
+          <p><b>Alergia:</b> 
+            ${t.alergia || "Nenhuma"}
+          </p>
+
+          <p><b>Observação:</b> 
+            ${t.observacao || "Nenhuma"}
+          </p>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+
+            <button onclick="selecionar(${index})">
+              Atender
+            </button>
+
+            <button class="btn-tv" onclick="chamarNaTV('${t.nome}')">
+              📺 Chamar na TV
+            </button>
+
           </div>
-        `;
-      });
+
+        </div>
+      `;
     });
+
+  } catch (erro) {
+    console.error("Erro ao carregar dados:", erro);
+  }
 }
 
 // Função criada para enviar o nome do paciente para a TV quando ele for chamado no consultório.
