@@ -32,17 +32,42 @@
 </div>
 
 <script>
-function cadastrar(){
- fetch("http://localhost:3000/atendimento",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body: JSON.stringify({
-    nome: nome.value,
-    cpf: cpf.value,
-    tipo: tipo.value
-  })
- });
- alert("Paciente enviado para triagem");
+async function cadastrar() {
+  try {
+    const resposta = await fetch("http://localhost:3000/atendimento", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: document.getElementById("nome").value,
+        cpf: document.getElementById("cpf").value,
+        data_nascimento: document.getElementById("data-nascimento").value,
+        sexo: document.getElementById("sexo").value,
+        nome_mae: document.getElementById("nome-mae").value,
+        estado_civil: document.getElementById("estado-civil").value,
+        endereco: document.getElementById("endereco").value,
+        telefone: document.getElementById("telefone").value,
+        email: document.getElementById("email").value,
+        contato_emergencia: document.getElementById("contato-emergencia").value,
+        tipo: document.getElementById("tipo").value
+      })
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao cadastrar paciente");
+    }
+
+    const paciente = await resposta.json();
+
+    console.log("Paciente cadastrado:", paciente);
+
+    alert("Paciente enviado para triagem!");
+
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao cadastrar o paciente.");
+  }
 }
 </script>
 </body>
