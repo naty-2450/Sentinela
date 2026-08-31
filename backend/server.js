@@ -57,6 +57,14 @@ app.post("/atendimento", (req, res) => {
     id: Date.now(),
     nome: req.body.nome,
     cpf: req.body.cpf,
+    data_nascimento: req.body.data_nascimento,
+    sexo: req.body.sexo,
+    nome_mae: req.body.nome_mae,
+    estado_civil: req.body.estado_civil,
+    endereco: req.body.endereco,
+    telefone: req.body.telefone,
+    email: req.body.email,
+    contato_emergencia: req.body.contato_emergencia,
     tipo: req.body.tipo,
     status: "triagem",
     createdAt: new Date()
@@ -67,7 +75,6 @@ app.post("/atendimento", (req, res) => {
 
   res.json(paciente);
 });
-
 // LISTAR PACIENTES (triagem busca quem foi cadastrado no atendimento)
 app.get("/pacientes", (req, res) => {
   const db = readDB();
