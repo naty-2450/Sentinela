@@ -1,259 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .btn-tv {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-    .btn-tv:hover {background: #1e7e34;}
-    .btn-abrir-tv {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-    .btn-abrir-tv:hover {background: #117a8b;}
-   .consultorio-input {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      background: #f0f4ff;
-      padding: 10px 14px;
-      border: 1px solid #d0d8f0;
-    }
-    .consultorio-input label {font-weight: bold;}
-    .consultorio-input input {
-      width: 60px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 4px 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-  </style>
+
+  <title>Triagem</title>
 </head>
-  
+
 <body>
-   <h3>Consulta</h3>
 
-  <input id="paciente" placeholder="Paciente" readonly>
+  <div class="container">
 
-  <input id="diagnostico" placeholder="Diagnóstico">
+    <h2>🩺 Painel de Triagem</h2>
 
-  <select id="medicacao">
-    <option value="">Selecione a medicação</option>
-  </select>
+    <div id="pacientes"></div>
 
-  <textarea id="obs" placeholder="Observações"></textarea>
+  </div>
 
-  <button onclick="salvar()">Salvar</button> 
-    <hr>
-  
- <div class="container">
- <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-  <h2 >Informações pacientes</h2>
-</div>
+  <script>
+
+    async function carregarPacientes() {
+
+      try {
+
+        const resposta = await fetch("/pacientes");
+        const pacientes = await resposta.json();
+
+        const div = document.getElementById("pacientes");
+
+        div.innerHTML = "";
+
+        if (pacientes.length === 0) {
+
+          div.innerHTML =
+            "<p style='text-align:center; color:#aaa;'>Nenhum paciente aguardando triagem.</p>";
+
+          return;
+        }
+
+        pacientes.forEach((p, index) => {
+
+          div.innerHTML += `
+
+            <div class="card">
+
+              <h3>${p.nome}</h3>
+
+              <h4>📋 Dados do paciente</h4>
+
+              <p><b>CPF:</b> ${p.cpf || "Não informado"}</p>
+
+              <p><b>Data de nascimento:</b>
+                ${p.data_nascimento || "Não informada"}
+              </p>
+
+              <p><b>Sexo:</b>
+                ${p.sexo || "Não informado"}
+              </p>
+
+              <p><b>Nome materno:</b>
+                ${p.nome_mae || "Não informado"}
+              </p>
+
+              <p><b>Estado civil:</b>
+                ${p.estado_civil || "Não informado"}
+              </p>
+
+              <p><b>Endereço:</b>
+                ${p.endereco || "Não informado"}
+              </p>
+
+              <p><b>Telefone:</b>
+                ${p.telefone || "Não informado"}
+              </p>
+
+              <p><b>E-mail:</b>
+                ${p.email || "Não informado"}
+              </p>
+
+              <p><b>Contato de emergência:</b>
+                ${p.contato_emergencia || "Não informado"}
+              </p>
+
+              <hr>
+
+              <h4>🩺 Realizar triagem</h4>
+
+              <label>Sintoma</label>
+              <input
+                type="text"
+                id="sintoma-${index}"
+                placeholder="Informe o sintoma"
+              >
+
+              <label>Temperatura</label>
+              <input
+                type="number"
+                step="0.1"
+                id="temperatura-${index}"
+                placeholder="Ex: 37.5"
+              >
+
+              <label>Alergia</label>
+              <input
+                type="text"
+                id="alergia-${index}"
+                placeholder="Informe a alergia ou escreva Nenhuma"
+              >
+
+              <label>Observação</label>
+              <textarea
+                id="observacao-${index}"
+                placeholder="Observações da triagem"
+              ></textarea>
+
+              <label>Classificação de risco</label>
+
+              <select id="risco-${index}">
+
+                <option value="verde">
+                  🟢 Verde
+                </option>
+
+                <option value="amarelo">
+                  🟡 Amarelo
+                </option>
+
+                <option value="vermelho">
+                  🔴 Vermelho
+                </option>
+
+              </select>
+
+              <button onclick="salvarTriagem(${index})">
+                Salvar Triagem
+              </button>
+
+            </div>
+
+          `;
+
+        });
+
+      } catch (erro) {
+
+        console.error("Erro ao carregar pacientes:", erro);
+
+      }
+
+    }
 
 
-  <div id="triagens"></div>
+    async function salvarTriagem(index) {
+
+      try {
+
+        const respostaPacientes = await fetch("/pacientes");
+        const pacientes = await respostaPacientes.json();
+
+        const paciente = pacientes[index];
+
+        const sintoma =
+          document.getElementById(`sintoma-${index}`).value;
+
+        const temperatura =
+          document.getElementById(`temperatura-${index}`).value;
+
+        const alergia =
+          document.getElementById(`alergia-${index}`).value || "Nenhuma";
+
+        const observacao =
+          document.getElementById(`observacao-${index}`).value;
+
+        const risco =
+          document.getElementById(`risco-${index}`).value;
 
 
+        if (!sintoma) {
 
-</div>
+          alert("Informe o sintoma do paciente.");
+          return;
 
-<script>
-
-let triagensCarregadas = [];
-
-
+        }
 
 
-async function carregar() {
-  try {
-    const [resTriagens, resPacientes] = await Promise.all([
-      fetch("/triagens"),
-      fetch("/pacientes")
-    ]);
+        if (!temperatura) {
 
-    const triagens = await resTriagens.json();
-    const pacientes = await resPacientes.json();
+          alert("Informe a temperatura do paciente.");
+          return;
 
-    triagensCarregadas = triagens;
+        }
 
-    const div = document.getElementById("triagens");
-    div.innerHTML = "";
 
-    triagens.forEach((t, index) => {
+        const resposta = await fetch("/triagem", {
 
-      // Encontra o cadastro completo do paciente
-      const paciente = pacientes.find(p => p.nome === t.nome) || {};
+          method: "POST",
 
-      div.innerHTML += `
-        <div class="card">
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-          <h3>${t.nome}</h3>
+          body: JSON.stringify({
 
-          <h4>📋 Dados do paciente</h4>
+            nome: paciente.nome,
+            sintoma: sintoma,
+            temperatura: temperatura,
+            alergia: alergia,
+            observacao: observacao,
+            risco: risco
 
-          <p><b>CPF:</b> ${paciente.cpf || "Não informado"}</p>
+          })
 
-          <p><b>Data de nascimento:</b> 
-            ${paciente.data_nascimento || "Não informada"}
-          </p>
+        });
 
-          <p><b>Sexo:</b> 
-            ${paciente.sexo || "Não informado"}
-          </p>
 
-          <p><b>Nome materno:</b> 
-            ${paciente.nome_mae || "Não informado"}
-          </p>
+        if (!resposta.ok) {
 
-          <p><b>Estado civil:</b> 
-            ${paciente.estado_civil || "Não informado"}
-          </p>
+          throw new Error("Erro ao salvar triagem.");
 
-          <p><b>Endereço:</b> 
-            ${paciente.endereco || "Não informado"}
-          </p>
+        }
 
-          <p><b>Telefone:</b> 
-            ${paciente.telefone || "Não informado"}
-          </p>
 
-          <p><b>E-mail:</b> 
-            ${paciente.email || "Não informado"}
-          </p>
+        alert("✅ Triagem salva com sucesso!");
 
-          <p><b>Contato de emergência:</b> 
-            ${paciente.contato_emergencia || "Não informado"}
-          </p>
+        carregarPacientes();
 
-          <hr>
+      } catch (erro) {
 
-          <h4>🩺 Dados da triagem</h4>
+        console.error("Erro:", erro);
 
-          <p><b>Sintoma:</b> 
-            ${t.sintoma || "Não informado"}
-          </p>
+        alert("❌ Não foi possível salvar a triagem.");
 
-          <p><b>Temperatura:</b> 
-            ${t.temperatura || "Não informada"}°C
-          </p>
+      }
 
-          <p>
-            <span class="${t.risco}">
-              ${t.risco}
-            </span>
-          </p>
+    }
 
-          <p><b>Alergia:</b> 
-            ${t.alergia || "Nenhuma"}
-          </p>
 
-          <p><b>Observação:</b> 
-            ${t.observacao || "Nenhuma"}
-          </p>
+    carregarPacientes();
 
-          <button class="btn-abrir-tv" onclick="selecionar(${index})">
-            Atender
-          </button>
+    // Atualiza a lista a cada 10 segundos
+    setInterval(carregarPacientes, 10000);
 
-        </div>
-      `;
-    });
-
-  } catch (erro) {
-    console.error("Erro ao carregar dados:", erro);
-  }
-}
-
-function selecionar(index) {
-  const t = triagensCarregadas[index];
-
-  document.getElementById("paciente").value = t.nome;
-  document.getElementById("obs").value = t.observacao || "";
-
-  if (t.alergia && t.alergia !== "Nenhuma") {
-    alert("⚠️ Paciente possui alergia: " + t.alergia);
-  }
-}
-
-function carregarMedicacoes() {
-  fetch("/lista-medicacoes")
-    .then(r => r.json())
-    .then(data => {
-      const select = document.getElementById("medicacao");
-
-      select.innerHTML = `
-        <option value="">Selecione a medicação</option>
-      `;
-
-      data.forEach(med => {
-        const option = document.createElement("option");
-        option.value = med;
-        option.textContent = med;
-        select.appendChild(option);
-      });
-    });
-}
-
-function salvar() {
-  const paciente = document.getElementById("paciente").value;
-  const diagnostico = document.getElementById("diagnostico").value;
-  const medicacao = document.getElementById("medicacao").value;
-  const obs = document.getElementById("obs").value;
-
-  if (!paciente) {
-    alert("Selecione um paciente clicando em Atender.");
-    return;
-  }
-
-  if (!medicacao) {
-    alert("Selecione uma medicação.");
-    return;
-  }
-
-  fetch("/consulta", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      paciente,
-      diagnostico,
-      medicacao,
-      obs
-    })
-  })
-  .then(r => r.json())
-  .then(() => {
-    alert("Consulta salva");
-
-    document.getElementById("diagnostico").value = "";
-    document.getElementById("medicacao").value = "";
-    document.getElementById("obs").value = "";
-  });
-}
-
-carregar();
-carregarMedicacoes();
-
-</script>
+  </script>
 
 </body>
+
 </html>
