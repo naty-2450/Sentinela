@@ -182,17 +182,21 @@ async function carregar() {
             ${t.observacao || "Nenhuma"}
           </p>
 
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+<div style="display:flex; gap:8px; flex-wrap:wrap;">
 
-            <button onclick="selecionar(${index})">
-              Atender
-            </button>
+  <button onclick="selecionar(${index})">
+    Atender
+  </button>
 
-            <button class="btn-tv" onclick="chamarNaTV('${t.nome}')">
-              📺 Chamar na TV
-            </button>
+  <button class="btn-tv" onclick="chamarNaTV('${t.nome}')">
+    📺 Chamar na TV
+  </button>
 
-          </div>
+  <button onclick="darAlta('${encodeURIComponent(t.nome)}')">
+    📄 Dar Alta
+  </button>
+
+</div>
 
         </div>
       `;
@@ -268,7 +272,10 @@ function salvar() {
     document.getElementById("obs").value = "";
   });
 }
-
+function darAlta(nome) {
+  window.location.href = "alta.html?nome=" + nome;
+}
+  
 carregar();
 carregarMedicacoes();
 
