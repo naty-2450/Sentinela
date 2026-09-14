@@ -2,400 +2,199 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Alta Médica - Health Vision</title>
+    <!-- CSS padrão do site -->
+    <link rel="stylesheet" href="css/style.css">
 
-  <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    body {
-      background: #f2f2f2;
-    }
-
-    .alta-container {
-      max-width: 850px;
-      margin: 30px auto;
-      background: white;
-      padding: 35px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .cabecalho {
-      text-align: center;
-      border-bottom: 2px solid #222;
-      padding-bottom: 20px;
-      margin-bottom: 25px;
-    }
-
-    .cabecalho h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    .cabecalho p {
-      margin: 5px 0;
-      color: #555;
-    }
-
-    .secao {
-      margin-top: 25px;
-    }
-
-    .secao h3 {
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 7px;
-      margin-bottom: 15px;
-    }
-
-    .campo {
-      margin-bottom: 15px;
-    }
-
-    .campo label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .campo input,
-    .campo textarea,
-    .campo select {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      font-size: 15px;
-    }
-
-    .linha {
-      display: flex;
-      gap: 15px;
-    }
-
-    .linha .campo {
-      flex: 1;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .botoes {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .btn-pdf {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .btn-pdf:hover {
-      background: #b02a37;
-    }
-
-    .btn-voltar {
-      background: #6c757d;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .assinaturas {
-      display: flex;
-      gap: 60px;
-      margin-top: 60px;
-    }
-
-    .assinatura {
-      flex: 1;
-      text-align: center;
-      border-top: 1px solid #222;
-      padding-top: 8px;
-    }
-
-    @media print {
-
-      body {
-        background: white;
-      }
-
-      .alta-container {
-        margin: 0;
-        max-width: none;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 20px;
-      }
-
-      .botoes {
-        display: none;
-      }
-
-      input,
-      textarea,
-      select {
-        border: 1px solid #777 !important;
-      }
-
-      @page {
-        size: A4;
-        margin: 15mm;
-      }
-    }
-  </style>
+    <title>Dar Alta</title>
 </head>
 
 <body>
 
-  <div class="alta-container">
+    <div class="container">
 
-    <div class="cabecalho">
-      <h1>HEALTH VISION</h1>
-      <p>Formulário de Alta Médica</p>
-    </div>
+        <h2>📄 Alta do Paciente</h2>
 
+        <hr>
 
-    <!-- DADOS DO PACIENTE -->
+        <h3>👤 Dados do Paciente</h3>
 
-    <div class="secao">
+        <div class="form-row">
 
-      <h3>👤 Dados do Paciente</h3>
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" id="nome" readonly>
+            </div>
 
-      <div class="campo">
-        <label>Nome completo</label>
-        <input type="text" id="nomePaciente">
-      </div>
+            <div class="form-group">
+                <label>CPF</label>
+                <input type="text" id="cpf" readonly>
+            </div>
 
-      <div class="linha">
-
-        <div class="campo">
-          <label>CPF</label>
-          <input type="text" id="cpf">
         </div>
 
-        <div class="campo">
-          <label>Data de nascimento</label>
-          <input type="text" id="dataNascimento">
+        <div class="form-row">
+
+            <div class="form-group">
+                <label>Data de nascimento</label>
+                <input type="text" id="data_nascimento" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Sexo</label>
+                <input type="text" id="sexo" readonly>
+            </div>
+
         </div>
 
-      </div>
-
-      <div class="linha">
-
-        <div class="campo">
-          <label>Sexo</label>
-          <input type="text" id="sexo">
+        <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" id="telefone" readonly>
         </div>
 
-        <div class="campo">
-          <label>Telefone</label>
-          <input type="text" id="telefone">
+        <hr>
+
+        <h3>🩺 Informações da Alta</h3>
+
+        <div class="form-group">
+            <label>Diagnóstico</label>
+            <textarea id="diagnostico" placeholder="Informe o diagnóstico do paciente"></textarea>
         </div>
 
-      </div>
-
-    </div>
-
-
-    <!-- INFORMAÇÕES DA ALTA -->
-
-    <div class="secao">
-
-      <h3>🩺 Informações da Alta</h3>
-
-      <div class="campo">
-        <label>Diagnóstico</label>
-        <textarea id="diagnostico"
-          placeholder="Informe o diagnóstico do paciente"></textarea>
-      </div>
-
-      <div class="campo">
-        <label>Condição do paciente na alta</label>
-        <textarea id="condicao"
-          placeholder="Descreva a condição do paciente no momento da alta"></textarea>
-      </div>
-
-      <div class="campo">
-        <label>Medicação / Prescrição</label>
-        <textarea id="medicacao"
-          placeholder="Informe as medicações ou prescrições"></textarea>
-      </div>
-
-      <div class="campo">
-        <label>Orientações ao paciente</label>
-        <textarea id="orientacoes"
-          placeholder="Informe as orientações para o paciente"></textarea>
-      </div>
-
-      <div class="campo">
-        <label>Retorno / Acompanhamento</label>
-        <textarea id="retorno"
-          placeholder="Informe se há necessidade de retorno ou acompanhamento"></textarea>
-      </div>
-
-    </div>
-
-
-    <!-- DADOS DO MÉDICO -->
-
-    <div class="secao">
-
-      <h3>👨‍⚕️ Dados do Médico</h3>
-
-      <div class="linha">
-
-        <div class="campo">
-          <label>Nome do médico</label>
-          <input type="text" id="medico">
+        <div class="form-group">
+            <label>Condição na alta</label>
+            <select id="condicao">
+                <option value="">Selecione</option>
+                <option value="Estável">Estável</option>
+                <option value="Melhorado">Melhorado</option>
+                <option value="Curado">Curado</option>
+                <option value="Encaminhado">Encaminhado</option>
+            </select>
         </div>
 
-        <div class="campo">
-          <label>CRM</label>
-          <input type="text" id="crm">
+        <div class="form-group">
+            <label>Medicação / Prescrição</label>
+            <textarea id="medicacao"
+                placeholder="Informe medicamentos ou prescrições"></textarea>
         </div>
 
-      </div>
+        <div class="form-group">
+            <label>Orientações ao paciente</label>
+            <textarea id="orientacoes"
+                placeholder="Informe as orientações para o paciente"></textarea>
+        </div>
 
-      <div class="campo">
-        <label>Data da alta</label>
-        <input type="date" id="dataAlta">
-      </div>
+        <div class="form-group">
+            <label>Retorno / Acompanhamento</label>
+            <textarea id="retorno"
+                placeholder="Informe se será necessário retorno ou acompanhamento"></textarea>
+        </div>
 
-    </div>
+        <hr>
 
+        <h3>👨‍⚕️ Responsável</h3>
 
-    <!-- ASSINATURAS -->
+        <div class="form-row">
 
-    <div class="assinaturas">
+            <div class="form-group">
+                <label>Nome do médico</label>
+                <input type="text" id="medico" placeholder="Nome do médico">
+            </div>
 
-      <div class="assinatura">
-        Médico responsável
-      </div>
+            <div class="form-group">
+                <label>CRM</label>
+                <input type="text" id="crm" placeholder="CRM">
+            </div>
 
-      <div class="assinatura">
-        Paciente / Responsável
-      </div>
+        </div>
+
+        <div class="form-group">
+            <label>Data da alta</label>
+            <input type="date" id="data_alta">
+        </div>
+
+        <hr>
+
+        <div class="form-row">
+
+            <button onclick="window.history.back()">
+                ← Voltar
+            </button>
+
+            <button onclick="gerarPDF()">
+                📄 Gerar PDF
+            </button>
+
+        </div>
 
     </div>
 
+    <script>
 
-    <!-- BOTÕES -->
+        // Pega o nome enviado pela página do médico
+        const params = new URLSearchParams(window.location.search);
+        const nomePaciente = params.get("nome");
 
-    <div class="botoes">
+        async function carregarPaciente() {
 
-      <button class="btn-voltar" onclick="window.location.href='medico.html'">
-        ← Voltar
-      </button>
+            if (!nomePaciente) {
+                alert("Paciente não informado.");
+                return;
+            }
 
-      <button class="btn-pdf" onclick="gerarPDF()">
-        📄 Gerar PDF
-      </button>
+            try {
 
-    </div>
+                const resposta = await fetch("/pacientes");
+                const pacientes = await resposta.json();
 
-  </div>
+                const paciente = pacientes.find(
+                    p => p.nome === nomePaciente
+                );
 
+                if (!paciente) {
+                    alert("Paciente não encontrado.");
+                    return;
+                }
 
-  <script>
+                document.getElementById("nome").value =
+                    paciente.nome || "";
 
-    async function carregarPaciente() {
+                document.getElementById("cpf").value =
+                    paciente.cpf || "";
 
-      const parametros = new URLSearchParams(window.location.search);
+                document.getElementById("data_nascimento").value =
+                    paciente.data_nascimento || "";
 
-      const nome = parametros.get("nome");
+                document.getElementById("sexo").value =
+                    paciente.sexo || "";
 
-      if (!nome) {
-        return;
-      }
+                document.getElementById("telefone").value =
+                    paciente.telefone || "";
 
-      const nomePaciente = decodeURIComponent(nome);
+            } catch (erro) {
 
-      try {
+                console.error("Erro ao carregar paciente:", erro);
+                alert("Erro ao carregar os dados do paciente.");
 
-        const resposta = await fetch("/pacientes");
-
-        const pacientes = await resposta.json();
-
-        const paciente = pacientes.find(
-          p => p.nome === nomePaciente
-        );
-
-        if (!paciente) {
-          document.getElementById("nomePaciente").value = nomePaciente;
-          return;
+            }
         }
 
-        document.getElementById("nomePaciente").value =
-          paciente.nome || "";
+        function gerarPDF() {
 
-        document.getElementById("cpf").value =
-          paciente.cpf || "";
+            window.print();
 
-        document.getElementById("dataNascimento").value =
-          paciente.data_nascimento || "";
+        }
 
-        document.getElementById("sexo").value =
-          paciente.sexo || "";
+        // Coloca a data atual automaticamente
+        const hoje = new Date().toISOString().split("T")[0];
+        document.getElementById("data_alta").value = hoje;
 
-        document.getElementById("telefone").value =
-          paciente.telefone || "";
+        carregarPaciente();
 
-      } catch (erro) {
-
-        console.error("Erro ao carregar paciente:", erro);
-
-        document.getElementById("nomePaciente").value =
-          nomePaciente;
-
-      }
-    }
-
-
-    function colocarDataAtual() {
-
-      const hoje = new Date();
-
-      const ano = hoje.getFullYear();
-
-      const mes = String(hoje.getMonth() + 1)
-        .padStart(2, "0");
-
-      const dia = String(hoje.getDate())
-        .padStart(2, "0");
-
-      document.getElementById("dataAlta").value =
-        `${ano}-${mes}-${dia}`;
-    }
-
-
-    function gerarPDF() {
-
-      window.print();
-
-    }
-
-
-    carregarPaciente();
-
-    colocarDataAtual();
-
-  </script>
+    </script>
 
 </body>
+
 </html>
