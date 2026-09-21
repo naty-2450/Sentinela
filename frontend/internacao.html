@@ -1,1 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>Internação</title>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h2>🏥 Internação Hospitalar</h2>
+
+    <div id="dados-paciente"></div>
+
+    <hr>
+
+    <h3>📋 Dados da Internação</h3>
+
+    <div class="form-group">
+
+      <label>Motivo da internação</label>
+
+      <textarea
+        id="motivo"
+        placeholder="Informe o motivo da internação"
+      ></textarea>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Diagnóstico</label>
+
+      <input
+        type="text"
+        id="diagnostico"
+        placeholder="Diagnóstico médico"
+      >
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>Tipo de internação</label>
+
+        <select id="tipo-internacao">
+
+          <option value="Clínica">
+            Clínica
+          </option>
+
+          <option value="Cirúrgica">
+            Cirúrgica
+          </option>
+
+          <option value="Observação">
+            Observação
+          </option>
+
+          <option value="UTI">
+            UTI
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Prioridade</label>
+
+        <select id="prioridade">
+
+          <option value="Normal">
+            Normal
+          </option>
+
+          <option value="Urgente">
+            Urgente
+          </option>
+
+          <option value="Emergência">
+            Emergência
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>Setor</label>
+
+        <select id="setor">
+
+          <option value="">
+            Selecione o setor
+          </option>
+
+          <option value="Clínica Médica">
+            Clínica Médica
+          </option>
+
+          <option value="Clínica Cirúrgica">
+            Clínica Cirúrgica
+          </option>
+
+          <option value="Pediatria">
+            Pediatria
+          </option>
+
+          <option value="UTI">
+            UTI
+          </option>
+
+          <option value="Observação">
+            Observação
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Quarto</label>
+
+        <input
+          type="text"
+          id="quarto"
+          placeholder="Ex: 204"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>Leito</label>
+
+        <input
+          type="text"
+          id="leito"
+          placeholder="Ex: 02"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Médico responsável</label>
+
+        <input
+          type="text"
+          id="medico"
+          placeholder="Nome do médico"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>Data da internação</label>
+
+        <input
+          type="date"
+          id="data-internacao"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Horário</label>
+
+        <input
+          type="time"
+          id="hora-internacao"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Alergias</label>
+
+      <input
+        type="text"
+        id="alergias"
+        placeholder="Informe as alergias ou escreva Nenhuma"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Medicamentos em uso</label>
+
+      <textarea
+        id="medicamentos"
+        placeholder="Informe os medicamentos que o paciente utiliza"
+      ></textarea>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Observações</label>
+
+      <textarea
+        id="observacoes"
+        placeholder="Informações adicionais sobre a internação"
+      ></textarea>
+
+    </div>
+
+    <button onclick="internar()">
+      🏥 Confirmar Internação
+    </button>
+
+    <button
+      type="button"
+      onclick="window.location.href='medico.html'">
+
+      ← Voltar para o Painel Médico
+
+    </button>
+
+    <div id="resultado"></div>
+
+  </div>
+
+
+  <script>
+
+    let pacienteAtual = null;
+
+
+    async function carregarPaciente() {
+
+      try {
+
+        const parametros =
+          new URLSearchParams(window.location.search);
+
+        const nome =
+          parametros.get("nome");
+
+
+        if (!nome) {
+
+          document.getElementById("dados-paciente").innerHTML =
+            "<p class='erro'>Paciente não informado.</p>";
+
+          return;
+
+        }
+
+
+        const resposta =
+          await fetch("/pacientes");
+
+        const pacientes =
+          await resposta.json();
+
+
+        pacienteAtual =
+          pacientes.find(p => p.nome === nome);
+
+
+        if (!pacienteAtual) {
+
+          document.getElementById("dados-paciente").innerHTML =
+            "<p class='erro'>Paciente não encontrado.</p>";
+
+          return;
+
+        }
+
+
+        document.getElementById("dados-paciente").innerHTML = `
+
+          <div class="card">
+
+            <h3>👤 ${pacienteAtual.nome}</h3>
+
+            <p>
+              <b>CPF:</b>
+              ${pacienteAtual.cpf || "Não informado"}
+            </p>
+
+            <p>
+              <b>Data de nascimento:</b>
+              ${pacienteAtual.data_nascimento || "Não informada"}
+            </p>
+
+            <p>
+              <b>Sexo:</b>
+              ${pacienteAtual.sexo || "Não informado"}
+            </p>
+
+            <p>
+              <b>Telefone:</b>
+              ${pacienteAtual.telefone || "Não informado"}
+            </p>
+
+            <p>
+              <b>Contato de emergência:</b>
+              ${pacienteAtual.contato_emergencia || "Não informado"}
+            </p>
+
+          </div>
+
+        `;
+
+
+        document.getElementById("alergias").value =
+          "Nenhuma";
+
+
+        const agora =
+          new Date();
+
+
+        document.getElementById("data-internacao").value =
+          agora.toISOString().split("T")[0];
+
+
+        document.getElementById("hora-internacao").value =
+          agora.toTimeString().slice(0, 5);
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar paciente:",
+          erro
+        );
+
+      }
+
+    }
+
+
+    async function internar() {
+
+      if (!pacienteAtual) {
+
+        alert("Paciente não encontrado.");
+
+        return;
+
+      }
+
+
+      const dados = {
+
+        paciente: pacienteAtual.nome,
+
+        paciente_id: pacienteAtual.id,
+
+        motivo:
+          document.getElementById("motivo").value,
+
+        diagnostico:
+          document.getElementById("diagnostico").value,
+
+        tipo_internacao:
+          document.getElementById("tipo-internacao").value,
+
+        prioridade:
+          document.getElementById("prioridade").value,
+
+        setor:
+          document.getElementById("setor").value,
+
+        quarto:
+          document.getElementById("quarto").value,
+
+        leito:
+          document.getElementById("leito").value,
+
+        medico:
+          document.getElementById("medico").value,
+
+        data:
+          document.getElementById("data-internacao").value,
+
+        hora:
+          document.getElementById("hora-internacao").value,
+
+        alergias:
+          document.getElementById("alergias").value,
+
+        medicamentos:
+          document.getElementById("medicamentos").value,
+
+        observacoes:
+          document.getElementById("observacoes").value
+
+      };
+
+
+      if (!dados.motivo) {
+
+        alert(
+          "Informe o motivo da internação."
+        );
+
+        return;
+
+      }
+
+
+      if (!dados.diagnostico) {
+
+        alert(
+          "Informe o diagnóstico."
+        );
+
+        return;
+
+      }
+
+
+      if (!dados.setor) {
+
+        alert(
+          "Selecione o setor."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const resposta =
+          await fetch("/internacao", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(dados)
+
+          });
+
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            "Erro ao registrar internação."
+          );
+
+        }
+
+
+        const resultado =
+          await resposta.json();
+
+
+        document.getElementById("resultado").innerHTML =
+          `
+            <div class="sucesso">
+              ✅ Internação registrada com sucesso!
+            </div>
+          `;
+
+
+        console.log(
+          "Internação:",
+          resultado
+        );
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro:",
+          erro
+        );
+
+
+        document.getElementById("resultado").innerHTML =
+          `
+            <div class="erro">
+              ❌ Não foi possível registrar a internação.
+            </div>
+          `;
+
+      }
+
+    }
+
+
+    carregarPaciente();
+
+  </script>
+
+</body>
+
+</html>
