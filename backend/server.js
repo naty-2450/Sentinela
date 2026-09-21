@@ -187,6 +187,43 @@ app.post("/consulta", (req, res) => {
   res.json(consulta);
 });
 
+// INTERNAÇÃO
+app.post("/internacao", (req, res) => {
+  const db = readDB();
+
+  // Cria a lista caso ainda não exista no db.json
+  if (!db.internacoes) {
+    db.internacoes = [];
+  }
+
+  const internacao = {
+    id: Date.now(),
+    paciente: req.body.paciente,
+    paciente_id: req.body.paciente_id,
+    motivo: req.body.motivo,
+    diagnostico: req.body.diagnostico,
+    tipo_internacao: req.body.tipo_internacao,
+    prioridade: req.body.prioridade,
+    setor: req.body.setor,
+    quarto: req.body.quarto,
+    leito: req.body.leito,
+    medico: req.body.medico,
+    data: req.body.data,
+    hora: req.body.hora,
+    alergias: req.body.alergias,
+    medicamentos: req.body.medicamentos,
+    observacoes: req.body.observacoes,
+    status: "internado",
+    createdAt: new Date()
+  };
+
+  db.internacoes.push(internacao);
+
+  writeDB(db);
+
+  res.json(internacao);
+});
+
 // MEDICAÇÕES
 app.get("/medicacoes", (req, res) => {
   const db = readDB();
