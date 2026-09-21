@@ -284,14 +284,19 @@
 
                   📺 Chamar na TV
 
-                </button>
+            <button
+               onclick="internarPaciente('${encodeURIComponent(t.nome)}')">
 
-                <button
-                  onclick="darAlta('${encodeURIComponent(t.nome)}')">
+             🏥 Internar
 
-                  📄 Dar Alta
+            </button>
 
-                </button>
+            <button
+              onclick="darAlta('${encodeURIComponent(t.nome)}')">
+
+             📄 Dar Alta
+
+             </button>
 
               </div>
 
@@ -494,13 +499,20 @@
     }
 
 
-    function darAlta(nome) {
+    function internarPaciente(nome) {
 
-      window.location.href =
-        "alta.html?nome=" + nome;
+  window.location.href =
+    "internacao.html?nome=" + nome;
 
-    }
+}
 
+
+function darAlta(nome) {
+
+  window.location.href =
+    "alta.html?nome=" + nome;
+
+}
 
     carregar();
 
