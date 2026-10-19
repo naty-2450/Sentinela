@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -5,7 +6,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
-
   <title>Triagem</title>
 </head>
 
@@ -22,177 +22,299 @@
   <script>
 
     async function carregarPacientes() {
-
       try {
-
         const resposta = await fetch("/pacientes");
-        const pacientes = await resposta.json();
 
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar pacientes.");
+        }
+
+        const pacientes = await resposta.json();
         const div = document.getElementById("pacientes");
 
         div.innerHTML = "";
 
         if (pacientes.length === 0) {
-
           div.innerHTML =
             "<p style='text-align:center; color:#aaa;'>Nenhum paciente aguardando triagem.</p>";
-
           return;
         }
 
         pacientes.forEach((p, index) => {
 
           div.innerHTML += `
-
             <div class="card">
 
-              <h3>${p.nome}</h3>
+              <h3>${p.nome || "Paciente"}</h3>
 
               <h4>📋 Dados do paciente</h4>
 
               <p><b>CPF:</b> ${p.cpf || "Não informado"}</p>
-
-              <p><b>Data de nascimento:</b>
-                ${p.data_nascimento || "Não informada"}
-              </p>
-
-              <p><b>Sexo:</b>
-                ${p.sexo || "Não informado"}
-              </p>
-
-              <p><b>Nome materno:</b>
-                ${p.nome_mae || "Não informado"}
-              </p>
-
-              <p><b>Estado civil:</b>
-                ${p.estado_civil || "Não informado"}
-              </p>
-
-              <p><b>Endereço:</b>
-                ${p.endereco || "Não informado"}
-              </p>
-
-              <p><b>Telefone:</b>
-                ${p.telefone || "Não informado"}
-              </p>
-
-              <p><b>E-mail:</b>
-                ${p.email || "Não informado"}
-              </p>
-
-              <p><b>Contato de emergência:</b>
-                ${p.contato_emergencia || "Não informado"}
-              </p>
+              <p><b>Data de nascimento:</b> ${p.data_nascimento || "Não informada"}</p>
+              <p><b>Sexo:</b> ${p.sexo || "Não informado"}</p>
+              <p><b>Nome materno:</b> ${p.nome_mae || "Não informado"}</p>
+              <p><b>Estado civil:</b> ${p.estado_civil || "Não informado"}</p>
+              <p><b>Endereço:</b> ${p.endereco || "Não informado"}</p>
+              <p><b>Telefone:</b> ${p.telefone || "Não informado"}</p>
+              <p><b>E-mail:</b> ${p.email || "Não informado"}</p>
+              <p><b>Contato de emergência:</b> ${p.contato_emergencia || "Não informado"}</p>
 
               <hr>
 
               <h4>🩺 Realizar triagem</h4>
 
-              <label>Sintoma</label>
+              <label for="sintoma-${index}">Sintomas</label>
               <input
                 type="text"
                 id="sintoma-${index}"
-                placeholder="Informe o sintoma"
+                placeholder="Informe os sintomas"
               >
 
-              <label>Temperatura</label>
+              <label for="temperatura-${index}">Temperatura (°C)</label>
               <input
                 type="number"
                 step="0.1"
                 id="temperatura-${index}"
                 placeholder="Ex: 37.5"
+                min="25"
+                max="45"
               >
 
-              <label>Alergia</label>
+              <label for="alergia-${index}">Alergias</label>
               <input
                 type="text"
                 id="alergia-${index}"
-                placeholder="Informe a alergia ou escreva Nenhuma"
+                placeholder="Informe as alergias ou escreva Nenhuma"
               >
 
-              <label>Observação</label>
+              <label for="observacao-${index}">Observações</label>
               <textarea
                 id="observacao-${index}"
                 placeholder="Observações da triagem"
               ></textarea>
 
-              <label>Classificação de risco</label>
+              <button
+                type="button"
+                onclick="sugerirRisco(${index})"
+              >
+                🤖 Sugerir risco com IA
+              </button>
+
+              <div
+                id="resultado-ia-${index}"
+                role="status"
+                aria-live="polite"
+                style="margin: 12px 0;"
+              ></div>
+
+              <label for="risco-${index}">Classificação de risco</label>
 
               <select id="risco-${index}">
-
-                <option value="verde">
-                  🟢 Verde
-                </option>
-
-                <option value="amarelo">
-                  🟡 Amarelo
-                </option>
-
-                <option value="vermelho">
-                  🔴 Vermelho
-                </option>
-
+                <option value="verde">🟢 Verde</option>
+                <option value="amarelo">🟡 Amarelo</option>
+                <option value="vermelho">🔴 Vermelho</option>
               </select>
 
-              <button onclick="salvarTriagem(${index})">
+              <p style="font-size: 13px;">
+                A sugestão é uma simulação acadêmica.
+                O profissional deve avaliar o paciente e confirmar
+                a classificação antes de salvar.
+              </p>
+
+              <button
+                type="button"
+                onclick="salvarTriagem(${index})"
+              >
                 Salvar Triagem
               </button>
 
             </div>
-
           `;
 
         });
 
       } catch (erro) {
-
         console.error("Erro ao carregar pacientes:", erro);
-
+        document.getElementById("pacientes").textContent =
+          "Não foi possível carregar os pacientes.";
       }
-
     }
 
 
+    // SIMULAÇÃO ACADÊMICA DE IA
+    function sugerirRisco(index) {
+
+      const sintoma = document
+        .getElementById(`sintoma-${index}`)
+        .value.toLowerCase()
+        .trim();
+
+      const temperaturaTexto = document
+        .getElementById(`temperatura-${index}`)
+        .value;
+
+      const observacao = document
+        .getElementById(`observacao-${index}`)
+        .value.toLowerCase()
+        .trim();
+
+      const resultado = document.getElementById(
+        `resultado-ia-${index}`
+      );
+
+      if (!sintoma) {
+        alert("Informe os sintomas antes de solicitar uma sugestão.");
+        return;
+      }
+
+      if (
+        temperaturaTexto === "" ||
+        !Number.isFinite(Number(temperaturaTexto)) ||
+        Number(temperaturaTexto) < 25 ||
+        Number(temperaturaTexto) > 45
+      ) {
+        alert("Informe uma temperatura válida.");
+        return;
+      }
+
+      const temperatura = Number(temperaturaTexto);
+      const texto = `${sintoma} ${observacao}`;
+
+      let risco = "verde";
+      let justificativa =
+        "A simulação não encontrou palavras de alerta configuradas. Isso não exclui riscos clínicos.";
+
+      const sinaisEmergencia = [
+        "falta de ar intensa",
+        "dificuldade intensa para respirar",
+        "dor no peito",
+        "convulsão",
+        "inconsciente",
+        "inconsciência",
+        "confusão mental súbita",
+        "sangramento intenso",
+        "sinais de avc"
+      ];
+
+      const sinaisAtencao = [
+        "falta de ar",
+        "dificuldade para respirar",
+        "febre",
+        "vomito",
+        "vômito",
+        "dor intensa",
+        "tontura",
+        "desmaio",
+        "sangramento"
+      ];
+
+      if (sinaisEmergencia.some(sinal => texto.includes(sinal))) {
+
+        risco = "vermelho";
+        justificativa =
+          "Foram encontradas palavras que podem indicar emergência. É necessária avaliação profissional imediata. Não aguarde a simulação para buscar atendimento.";
+
+      } else if (
+        temperatura >= 38 ||
+        sinaisAtencao.some(sinal => texto.includes(sinal))
+      ) {
+
+        risco = "amarelo";
+        justificativa =
+          "Foram encontrados indicadores que merecem avaliação profissional. A gravidade não pode ser determinada apenas por estas informações.";
+
+      } else {
+
+        risco = "verde";
+        justificativa =
+          "A simulação não encontrou os indicadores configurados para sugerir amarelo ou vermelho. Isso não significa que o paciente esteja clinicamente sem risco.";
+
+      }
+
+      // Preenche a classificação sugerida.
+      // O profissional pode alterá-la antes de salvar.
+      document.getElementById(`risco-${index}`).value = risco;
+
+      const cores = {
+        verde: "🟢 Verde",
+        amarelo: "🟡 Amarelo",
+        vermelho: "🔴 Vermelho"
+      };
+
+      resultado.replaceChildren();
+
+      const titulo = document.createElement("strong");
+      titulo.textContent = "🤖 Sugestão simulada: " + cores[risco];
+
+      const explicacao = document.createElement("p");
+      explicacao.textContent = justificativa;
+
+      const aviso = document.createElement("small");
+      aviso.textContent =
+        "Simulação acadêmica, não validada clinicamente. A classificação final exige avaliação profissional.";
+
+      resultado.append(titulo, explicacao, aviso);
+    }
+
+
+    // SALVAR TRIAGEM
     async function salvarTriagem(index) {
 
       try {
 
         const respostaPacientes = await fetch("/pacientes");
-        const pacientes = await respostaPacientes.json();
 
+        if (!respostaPacientes.ok) {
+          throw new Error("Não foi possível consultar os pacientes.");
+        }
+
+        const pacientes = await respostaPacientes.json();
         const paciente = pacientes[index];
 
-        const sintoma =
-          document.getElementById(`sintoma-${index}`).value;
+        if (!paciente) {
+          alert("Paciente não encontrado. Atualize a página.");
+          return;
+        }
 
-        const temperatura =
-          document.getElementById(`temperatura-${index}`).value;
+        const sintoma = document
+          .getElementById(`sintoma-${index}`)
+          .value.trim();
 
-        const alergia =
-          document.getElementById(`alergia-${index}`).value || "Nenhuma";
+        const temperaturaTexto = document
+          .getElementById(`temperatura-${index}`)
+          .value;
 
-        const observacao =
-          document.getElementById(`observacao-${index}`).value;
+        const alergia = document
+          .getElementById(`alergia-${index}`)
+          .value.trim() || "Nenhuma";
 
-        const risco =
-          document.getElementById(`risco-${index}`).value;
+        const observacao = document
+          .getElementById(`observacao-${index}`)
+          .value.trim();
 
+        const risco = document
+          .getElementById(`risco-${index}`)
+          .value;
 
         if (!sintoma) {
-
-          alert("Informe o sintoma do paciente.");
+          alert("Informe os sintomas do paciente.");
           return;
-
         }
 
-
-        if (!temperatura) {
-
-          alert("Informe a temperatura do paciente.");
+        if (
+          temperaturaTexto === "" ||
+          !Number.isFinite(Number(temperaturaTexto)) ||
+          Number(temperaturaTexto) < 25 ||
+          Number(temperaturaTexto) > 45
+        ) {
+          alert("Informe uma temperatura válida.");
           return;
-
         }
 
+        if (!["verde", "amarelo", "vermelho"].includes(risco)) {
+          alert("Selecione uma classificação de risco válida.");
+          return;
+        }
 
         const resposta = await fetch("/triagem", {
 
@@ -203,25 +325,21 @@
           },
 
           body: JSON.stringify({
-
+            paciente_id: paciente.id,
             nome: paciente.nome,
             sintoma: sintoma,
-            temperatura: temperatura,
+            temperatura: Number(temperaturaTexto),
             alergia: alergia,
             observacao: observacao,
             risco: risco
-
           })
 
         });
 
-
         if (!resposta.ok) {
-
-          throw new Error("Erro ao salvar triagem.");
-
+          const erro = await resposta.json().catch(() => ({}));
+          throw new Error(erro.erro || "Erro ao salvar a triagem.");
         }
-
 
         alert("✅ Triagem salva com sucesso!");
 
@@ -229,20 +347,16 @@
 
       } catch (erro) {
 
-        console.error("Erro:", erro);
-
-        alert("❌ Não foi possível salvar a triagem.");
+        console.error("Erro ao salvar triagem:", erro);
+        alert("❌ Não foi possível salvar a triagem: " + erro.message);
 
       }
 
     }
 
-
     carregarPacientes();
-
 
   </script>
 
 </body>
-
 </html>
