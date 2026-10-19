@@ -81,36 +81,76 @@ app.get("/pacientes", (req, res) => {
   res.json(db.pacientes);
 });
 
-// TRIAGEM
+
+ // TRIAGEM
 app.post("/triagem", (req, res) => {
-  const db = readDB();
+  try {
+    const db = readDB();
 
-  let risco = req.body.risco;
+    const {
+      paciente_id,
+      nome,
+      sintoma,
+      temperatura,
+      alergia,
+      observacao,
+      risco
+    } = req.body;
 
-  if (req.body.temperatura >= 39) {
-    risco = "vermelho";
-  } else if (req.body.temperatura >= 38) {
-    risco = "amarelo";
-  } else if (!risco) {
-    risco = "verde";
+    if (!sintoma || !sintoma.trim()) {
+      return res.status(400).json({
+        erro: "Informe os sintomas do paciente."
+      });
+    }
+
+    const temp = Number(temperatura);
+
+    if (
+      temperatura === undefined ||
+      temperatura === null ||
+      temperatura === "" ||
+      !Number.isFinite(temp) ||
+      temp < 25 ||
+      temp > 45
+    ) {
+      return res.status(400).json({
+        erro: "Informe uma temperatura válida."
+      });
+    }
+
+    if (!["verde", "amarelo", "vermelho"].includes(risco)) {
+      return res.status(400).json({
+        erro: "Selecione uma classificação de risco válida."
+      });
+    }
+
+    // Preserva a classificação selecionada pelo profissional.
+    // Não substitui automaticamente o risco pela temperatura.
+    const triagem = {
+      id: Date.now(),
+      paciente_id: paciente_id || null,
+      nome,
+      sintoma: sintoma.trim(),
+      temperatura: temp,
+      alergia: alergia || "Nenhuma",
+      observacao: observacao || "",
+      risco,
+      status: "aguardando_medico",
+      createdAt: new Date()
+    };
+
+    db.triagens.push(triagem);
+    writeDB(db);
+
+    res.json(triagem);
+
+  } catch (erro) {
+    console.error("Erro ao salvar triagem:", erro);
+
+    res.status(500).json({
+      erro: "Não foi possível salvar a triagem."
+    });
   }
-
-  const triagem = {
-    id: Date.now(),
-    nome: req.body.nome,
-    sintoma: req.body.sintoma,
-    temperatura: req.body.temperatura,
-    alergia: req.body.alergia,
-    observacao: req.body.observacao,
-    risco,
-    status: "aguardando_medico",
-    createdAt: new Date()
-  };
-
-  db.triagens.push(triagem);
-  writeDB(db);
-
-  res.json(triagem);
 });
 
 // LISTAR TRIAGENS
